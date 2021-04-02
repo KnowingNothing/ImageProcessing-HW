@@ -47,9 +47,10 @@ def filter_compute_impl(
 def process(file_path):
     # BGR
     img = cv2.imread(file_path)
+    assert img is not None, file_path
     kernel = np.array(
         [[0, -1, 0],
-         [-1, 5, -1],
+         [-1, 4, -1],
          [0, -1, 0]]
     )
 
