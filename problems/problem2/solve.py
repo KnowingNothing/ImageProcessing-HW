@@ -50,7 +50,7 @@ def process(file_path):
     assert img is not None, file_path
     kernel = np.array(
         [[0, -1, 0],
-         [-1, 4, -1],
+         [-1, 8, -1],
          [0, -1, 0]]
     )
 
@@ -72,6 +72,16 @@ def process(file_path):
     ax2.imshow(lap[:, :, [2,1,0]])
     ax2.title.set_text("Enhanced")
     plt.show()
+
+
+def Laplacian_Filter_solve(img, kernel):
+    lap = filter_compute_impl(img, kernel, pad=cv2.BORDER_REPLICATE)
+    return lap
+
+
+def Laplacian_Filter_opencv(img, kernel):
+    lap = cv2.filter2D(img, -1, kernel)
+    return lap
 
 
 def main(image_path):

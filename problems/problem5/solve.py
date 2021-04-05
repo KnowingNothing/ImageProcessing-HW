@@ -89,7 +89,8 @@ def filter_compute_impl(
             0, 255).astype(src.dtype)
         partial_results.append(im)
     res = np.stack(partial_results, axis=2)
-    return res, bgr_specs
+    specs = np.stack(bgr_specs, axis=2)
+    return res, specs
 
 
 def gaussian_filter_compute_impl(
@@ -156,6 +157,11 @@ def process(file_path):
     ax2.imshow(gau[:, :, [2,1,0]])
     ax2.title.set_text("Filtered")
     plt.show()
+
+
+def Gaussian_Lowpass_solve(img, radius):
+    gau, specs = gaussian_filter_compute_impl(img, radius, pad=cv2.BORDER_REPLICATE)
+    return gau, specs
 
 
 def main(image_path):

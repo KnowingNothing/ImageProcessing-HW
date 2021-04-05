@@ -256,6 +256,30 @@ def process(file_path):
     plt.show()
 
 
+def Image_Restoration_Average_Filter_solve(img):
+    kernel = np.ones([7, 7]) / (7 * 7)
+
+    avg = average_filter_compute_impl(
+        img, kernel, pad=cv2.BORDER_REPLICATE, accum_type=np.float64
+    )
+
+    return avg
+
+
+def Image_Restoration_Geometirc_Mean_Filter_solve(img):
+    geo = geomean_filter_compute_impl(
+        img, [7, 7], pad=cv2.BORDER_REPLICATE, accum_type=np.float64)
+
+    return geo
+
+
+def Image_Restoration_Adaptive_Median_solve(img):
+    adp = adaptive_med_filter_compute_impl(
+        img, [7, 7], pad=cv2.BORDER_REPLICATE, accum_type=np.float64)
+
+    return adp
+
+
 def main(image_path):
     assert os.path.exists(image_path) and os.path.isdir(image_path)
     for file in os.listdir(image_path):
