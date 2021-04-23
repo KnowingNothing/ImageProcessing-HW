@@ -2,6 +2,18 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 import os
+from numba import jit
+
+
+@jit
+def filter_core(res, src, filters, H, W, R, S):
+    for r in range(R):
+        for s in range(S):
+            dup = src[
+                r:H+r,
+                s:W+s, :]
+            res += (dup * filters[r, s])
+    return res
 
 
 def filter_compute_impl(
@@ -26,19 +38,9 @@ def filter_compute_impl(
     padded = cv2.copyMakeBorder(
                 src, pad_h, pad_h, pad_w, pad_w, pad, value=value
             ).astype(accum_type)
-    for r in range(R):
-        for s in range(S):
-            if len(padded.shape) == 2:
-                dup = padded[
-                    r:H+r,
-                    s:W+s].reshape(res.shape)
-            else:
-                dup = padded[
-                    r:H+r,
-                    s:W+s, :]
-            res += (dup * filters[r, s]).astype(accum_type)
-            if clip_on_the_fly:
-                res = np.clip(res, 0, 255)
+    if len(padded.shape) == 2:
+        padded = padded.reshape([*padded.shape, 1])
+    res = filter_core(res, padded, filters, H, W, R, S)
     if grey:
         res = res.reshape([H, W])
     return np.clip(res, 0, 255).astype(src.dtype)

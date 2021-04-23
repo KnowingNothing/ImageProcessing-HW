@@ -68,7 +68,8 @@
         <div style="text-align:left;">
             <h5>Sharpening Filter</h5>
                 <form id="form-SF" action="{{ url_for('S_F') }}" method="POST" enctype="multipart/form-data">        
-                <button id="Laplacian" class="primary-btn" type="submit" name="mode" value="Laplacian">Laplacian</button>
+                <button id="Laplacian 3x3" class="primary-btn" type="submit" name="mode" value="Laplacian-3x3">Laplacian 3x3</button>
+                <button id="Laplacian 5x5" class="primary-btn" type="submit" name="mode" value="Laplacian-5x5">Laplacian 5x5</button>
                 <input type="text" class="hidden" name="image" value="{{ image_name }}">  
             </form>
         </div>
@@ -87,6 +88,7 @@
                 <button id="Average" class="primary-btn" type="submit" name="mode" value="Average">Average</button>
                 <button id="Geomean" class="primary-btn" type="submit" name="mode" value="Geomean">Geomean</button>
                 <button id="Adaptive" class="primary-btn" type="submit" name="mode" value="Adaptive">Adaptive</button>
+                <button id="Improved_Geomean" class="primary-btn" type="submit" name="mode" value="Improved_Geomean">Improved Geomean</button>
                 <button id="All" class="primary-btn" type="submit" name="mode" value="All">All</button>
                 <input type="text" class="hidden" name="image" value="{{ image_name }}">  
             </form>

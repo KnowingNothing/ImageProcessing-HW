@@ -3,13 +3,12 @@
 from flask import Flask, request, render_template, send_from_directory
 import os
 from PIL import Image
-#从文件夹algorithm引入算法接口（Morphological_Transformation为形态学处理的代码）
-from algorithm import Morphological_Transformation
 from problems import (
     Laplacian_Filter_solve, Laplacian_Filter_opencv,
     Gaussian_Lowpass_solve,
     Image_Restoration_Average_Filter_solve,
     Image_Restoration_Geometirc_Mean_Filter_solve,
+    Image_Restoration_Improved_Geometirc_Mean_Filter_solve,
     Image_Restoration_Adaptive_Median_solve
 )
 import numpy as np
@@ -144,7 +143,37 @@ def S_F():
     print(img.shape, img.dtype)
 
     # check mode
-    if mode == "Laplacian":
+    if mode == "Laplacian-5x5":
+        # kernel = np.array(
+        #     [[-1, -1, -1],
+        #      [-1, 8, -1],
+        #      [-1, -1, -1]]
+        # )
+        kernel = np.array(
+            [[0, 0, -1, 0, 0],
+             [0, -1, -2, -1, 0],
+             [-1, -2, 16, -2, -1],
+             [0, -1, -2, -1, 0],
+             [0, 0, -1, 0, 0]]
+        )
+        print(kernel)
+        grad = Laplacian_Filter_solve(img, kernel)
+        # kernel = np.array(
+        #     [[-1, -1, -1],
+        #      [-1, 9, -1],
+        #      [-1, -1, -1]]
+        # )
+        kernel = np.array(
+            [[0, 0, -1, 0, 0],
+             [0, -1, -2, -1, 0],
+             [-1, -2, 17, -2, -1],
+             [0, -1, -2, -1, 0],
+             [0, 0, -1, 0, 0]]
+        )
+        print(kernel)
+        enhanced = Laplacian_Filter_solve(img, kernel)
+        enhanced_opencv = Laplacian_Filter_opencv(img, kernel)
+    elif mode == "Laplacian-3x3":
         kernel = np.array(
             [[-1, -1, -1],
              [-1, 8, -1],
@@ -256,11 +285,13 @@ def I_R():
         res = Image_Restoration_Average_Filter_solve(img)
     elif mode == "Geomean":
         res = Image_Restoration_Geometirc_Mean_Filter_solve(img)
+    elif mode == "Improved_Geomean":
+        res = Image_Restoration_Improved_Geometirc_Mean_Filter_solve(img)
     elif mode == "Adaptive":
         res = Image_Restoration_Adaptive_Median_solve(img)
     elif mode == "All":
         avg = Image_Restoration_Average_Filter_solve(img)
-        geo = Image_Restoration_Geometirc_Mean_Filter_solve(img)
+        geo = Image_Restoration_Improved_Geometirc_Mean_Filter_solve(img)
         adp = Image_Restoration_Adaptive_Median_solve(img)
 
         local_time = time.localtime(time.time())
