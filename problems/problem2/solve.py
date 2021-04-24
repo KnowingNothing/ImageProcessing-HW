@@ -12,7 +12,7 @@ def filter_core(res, src, filters, H, W, R, S):
             dup = src[
                 r:H+r,
                 s:W+s, :]
-            res += (dup * filters[r, s])
+            res += (dup * filters[r, s]).astype(res.dtype)
     return res
 
 

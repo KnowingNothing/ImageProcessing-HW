@@ -69,10 +69,6 @@ def filter_compute_impl(
     bgr_specs = []
     for c in range(C):
         slc = src[:, :, c]
-        max_val = np.max(slc)
-        min_val = np.min(slc)
-        mean_val = np.mean(slc)
-        std_val = np.std(slc)
         f = np.fft.fft2(slc)
         fshift = np.fft.fftshift(f)
         spec = 20 * np.log(np.abs(fshift))
@@ -80,10 +76,6 @@ def filter_compute_impl(
         filtered = np.multiply(fshift, filters)
         if_shift = np.fft.ifftshift(filtered)
         im = np.fft.ifft2(if_shift)
-        # im = np.clip(
-        #     scale_image(
-        #         np.abs(im), mean_val - 5 * std_val, mean_val + 5 * std_val),
-        #     0, 255).astype(src.dtype)
         im = np.clip(
                 np.abs(im),
             0, 255).astype(src.dtype)
@@ -160,6 +152,7 @@ def process(file_path):
 
 
 def Gaussian_Lowpass_solve(img, radius):
+    print(img.shape)
     gau, specs = gaussian_filter_compute_impl(img, radius, pad=cv2.BORDER_REPLICATE)
     return gau, specs
 

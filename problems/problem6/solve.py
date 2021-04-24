@@ -6,6 +6,7 @@ import math
 from numba import jit
 
 
+@jit
 def scale_image(img, u=0, v=255):
     max_val = np.max(img)
     min_val = np.min(img)
